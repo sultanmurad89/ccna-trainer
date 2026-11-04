@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CCNA 200-301 Trainer</title>
+  <meta name="description" content="CCNA 200-301 Exam Simulator and Official Study Guide">
+  <meta name="theme-color" content="#0f1420">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CCNA Trainer">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">CCNA <span>200-301</span></div>
+    <div class="topbar-info" id="topbar-info"></div>
+  </header>
+
+  <!-- ============ MAIN MENU ============ -->
+  <section id="screen-menu" class="screen">
+    <div class="menu-card">
+      <h1>CCNA 200-301 Exam Trainer</h1>
+      <p class="subtitle">Practice exam simulator and topic-based training aligned with the current CCNA 200-301 blueprint.</p>
+
+      <div class="menu-actions">
+        <button class="btn btn-primary btn-lg" id="btn-study">Study Book</button>
+        <button class="btn btn-secondary btn-lg" id="btn-exam">Exam Simulator</button>
+        <button class="btn btn-secondary btn-lg" id="btn-practice">Practice by Topic</button>
+        <button class="btn btn-secondary btn-lg" id="btn-manage">Manage Questions</button>
+      </div>
+      <p class="hint">Based on the Official Cert Guide (Odom, Volumes 1 &amp; 2).</p>
+    </div>
+  </section>
+
+  <!-- ============ STUDY (BOOK) ============ -->
+  <section id="screen-study" class="screen screen-study hidden">
+    <div class="study-wrap">
+
+      <aside class="study-side" id="study-side">
+        <div class="study-side-head">
+          <h3>Chapters</h3>
+          <div class="study-side-head-right">
+            <span class="study-progress" id="study-progress">0 / 49</span>
+            <button class="btn-icon study-side-close" id="btn-study-side-close" title="Close Chapters">✕</button>
+          </div>
+        </div>
+        <div id="study-toc"></div>
+      </aside>
+      <div class="study-backdrop" id="study-backdrop"></div>
+
+      <div class="study-content">
+        <div class="study-top">
+          <div>
+            <div class="study-part" id="study-part"></div>
+            <h2 id="study-ch-title"></h2>
+            <div class="study-sub" id="study-sub"></div>
+          </div>
+          <div class="study-actions">
+            <button class="btn btn-secondary" id="btn-study-toc-toggle">📑 Chapters</button>
+            <button class="btn btn-secondary" id="btn-study-read">Mark as read</button>
+          </div>
+        </div>
+
+        <div class="lesson-card">
+          <div class="lesson-num" id="lesson-num"></div>
+          <div class="lesson-body" id="lesson-body"></div>
+        </div>
+
+        <div class="study-nav">
+          <button class="btn btn-secondary" id="btn-study-prev">← Previous</button>
+          <button class="btn btn-secondary" id="btn-study-back">← Back to menu</button>
+          <button class="btn btn-secondary" id="btn-study-next">Next →</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ EXAM SETUP ============ -->
+  <section id="screen-exam-setup" class="screen hidden">
+    <div class="setup-card">
+      <h2>Exam Simulator</h2>
+
+      <div class="setup-group">
+        <label>Number of questions</label>
+        <div class="segmented" id="exam-count">
+          <button data-value="20">20</button>
+          <button data-value="50" class="active">50</button>
+          <button data-value="100">100</button>
+          <button data-value="all">All</button>
+        </div>
+      </div>
+
+      <div class="setup-group">
+        <label>Exam time</label>
+        <div class="segmented" id="exam-time">
+          <button data-value="0">No timer</button>
+          <button data-value="30">30 min</button>
+          <button data-value="60">60 min</button>
+          <button data-value="120" class="active">120 min</button>
+        </div>
+        <p class="setup-note">The real CCNA 200-301 is 120 minutes. You can pause and resume the timer during the exam.</p>
+      </div>
+
+      <div class="setup-group">
+        <label>Passing score (out of 1000)</label>
+        <div class="segmented" id="exam-pass">
+          <button data-value="800">800</button>
+          <button data-value="825" class="active">825</button>
+          <button data-value="850">850</button>
+        </div>
+      </div>
+
+      <div class="setup-row">
+        <label class="checkbox"><input type="checkbox" id="exam-shuffle" checked> Shuffle questions</label>
+        <label class="checkbox"><input type="checkbox" id="exam-review" checked> Allow marking questions for later</label>
+      </div>
+
+      <div class="setup-actions">
+        <button class="btn btn-secondary" id="btn-exam-back">Back</button>
+        <button class="btn btn-primary" id="btn-exam-start">Start exam</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRACTICE SETUP ============ -->
+  <section id="screen-practice-setup" class="screen hidden">
+    <div class="setup-card">
+      <h2>Practice by Topic</h2>
+      <p class="subtitle">Choose the topics — questions will only cover them. The correct answer is shown immediately.</p>
+
+      <div class="setup-group">
+        <label>Topics</label>
+        <div class="topic-list" id="topic-list"></div>
+      </div>
+
+      <div class="setup-group">
+        <label>Number of questions</label>
+        <div class="segmented" id="practice-count">
+          <button data-value="10" class="active">10</button>
+          <button data-value="20">20</button>
+          <button data-value="30">30</button>
+          <button data-value="all">All in topics</button>
+        </div>
+      </div>
+
+      <div class="setup-row">
+        <label class="checkbox"><input type="checkbox" id="practice-shuffle" checked> Shuffle questions</label>
+        <label class="checkbox"><input type="checkbox" id="practice-time"> Enable timer (30 min)</label>
+      </div>
+
+      <div class="setup-actions">
+        <button class="btn btn-secondary" id="btn-practice-back">Back</button>
+        <button class="btn btn-primary" id="btn-practice-start">Start practice</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MANAGE QUESTIONS ============ -->
+  <section id="screen-manage" class="screen hidden">
+    <div class="manage-wrap">
+      <div class="manage-head">
+        <div>
+          <h2>Manage Questions</h2>
+          <p class="subtitle">Add, delete, import and export questions. Changes are saved in this browser only.</p>
+        </div>
+        <div class="manage-actions">
+          <button class="btn btn-secondary" id="btn-manage-add">+ Add question</button>
+          <button class="btn btn-secondary" id="btn-manage-import">Import</button>
+          <button class="btn btn-secondary" id="btn-manage-export">Export</button>
+          <button class="btn btn-secondary" id="btn-manage-back">← Back to menu</button>
+          <input type="file" id="manage-file" accept=".json,application/json" class="hidden">
+        </div>
+      </div>
+
+      <div class="manage-form hidden" id="manage-form">
+        <div class="setup-group">
+          <label>Topic</label>
+          <input type="text" id="mf-topic" list="mf-topic-list" placeholder="e.g. Network Fundamentals">
+          <datalist id="mf-topic-list"></datalist>
+        </div>
+        <div class="setup-group">
+          <label>Question</label>
+          <textarea id="mf-question" rows="3" placeholder="Type the question text…"></textarea>
+        </div>
+        <div class="setup-group">
+          <label>Options — tick the correct one(s)</label>
+          <div id="mf-options"></div>
+          <button class="btn btn-secondary btn-sm" id="mf-add-option" type="button">+ Add option</button>
+        </div>
+        <div class="setup-group">
+          <label>Explanation (optional)</label>
+          <textarea id="mf-expl" rows="2" placeholder="Why this answer is correct…"></textarea>
+        </div>
+        <div class="setup-row">
+          <button class="btn btn-primary" id="mf-save" type="button">Save question</button>
+          <button class="btn btn-secondary" id="mf-cancel" type="button">Cancel</button>
+        </div>
+        <p class="manage-error" id="mf-error"></p>
+      </div>
+
+      <div class="setup-row manage-filters">
+        <select id="manage-topic-filter" class="manage-filter-select"></select>
+        <input type="text" id="manage-search" placeholder="Search questions…">
+        <label class="checkbox"><input type="checkbox" id="manage-show-deleted"> Show deleted</label>
+      </div>
+
+      <div id="manage-list"></div>
+      <div id="manage-hidden"></div>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ SCREEN ============ -->
+  <section id="screen-quiz" class="screen hidden">
+    <div class="quiz-head">
+      <div class="quiz-progress">
+        <div class="progress-bar">
+          <i id="progress-fill"></i>
+        </div>
+        <span class="progress-label" id="progress-label">0 / 0</span>
+      </div>
+      <div class="quiz-timer">
+        <button class="btn-icon" id="btn-timer-toggle" title="Pause / resume timer">⏸</button>
+        <span id="timer-display">--:--</span>
+      </div>
+    </div>
+
+    <div class="quiz-body">
+      <div class="question-area">
+        <div class="q-meta">
+          <span class="q-topic" id="q-topic"></span>
+          <span class="q-num" id="q-num">Question 1</span>
+          <button class="btn-icon flag" id="btn-flag" title="Mark for review">🚩</button>
+        </div>
+        <h3 class="q-text" id="q-text"></h3>
+        <div class="q-options" id="q-options"></div>
+        <div class="q-feedback hidden" id="q-feedback"></div>
+      </div>
+
+      <aside class="palette" id="quiz-palette">
+        <div class="palette-head">
+          <div class="palette-title">Questions</div>
+          <button class="btn btn-secondary btn-sm palette-toggle" id="btn-palette-toggle" type="button">Grid ▾</button>
+        </div>
+        <div class="palette-body" id="palette-body">
+          <div class="palette-grid" id="palette"></div>
+          <div class="palette-legend">
+            <span><i class="dot answered"></i>answered</span>
+            <span><i class="dot flagged"></i>flagged</span>
+            <span><i class="dot current"></i>current</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-finish">Finish</button>
+      </aside>
+    </div>
+
+    <div class="quiz-nav">
+      <button class="btn btn-secondary" id="btn-prev">← Previous</button>
+      <button class="btn btn-secondary" id="btn-next">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="screen-result" class="screen hidden">
+    <div class="result-card">
+      <h2 id="result-title"></h2>
+      <div class="result-score">
+        <div class="score-ring" id="score-ring">
+          <span id="score-value">0</span>
+          <span class="score-max">of 1000</span>
+        </div>
+      </div>
+      <div class="result-stats">
+        <div class="stat"><b id="stat-correct">0</b> correct</div>
+        <div class="stat"><b id="stat-wrong">0</b> incorrect</div>
+        <div class="stat"><b id="stat-skipped">0</b> unanswered</div>
+        <div class="stat"><b id="stat-time">0:00</b> time</div>
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-secondary" id="btn-review">Review answers</button>
+        <button class="btn btn-secondary" id="btn-retry">Try again</button>
+        <button class="btn btn-primary" id="btn-result-menu">Back to menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEW ANSWERS ============ -->
+  <section id="screen-review" class="screen hidden">
+    <div class="review-card">
+      <h2>Review Answers</h2>
+      <div class="review-filter">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="wrong">Incorrect</button>
+        <button class="chip" data-filter="right">Correct</button>
+        <button class="chip" data-filter="skipped">Unanswered</button>
+      </div>
+      <div id="review-list"></div>
+      <button class="btn btn-secondary btn-block" id="btn-review-back">← Back to results</button>
+    </div>
+  </section>
+
+  <script src="js/book.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(err => {
+          console.warn("ServiceWorker registration failed: ", err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
